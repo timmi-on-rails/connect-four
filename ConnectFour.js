@@ -312,7 +312,7 @@ Bridge.assembly("ConnectFour", function ($asm, globals) {
             },
             ctors: {
                 init: function () {
-                    this.Info = "1.0.4";
+                    this.Info = "1.0.5";
                 }
             }
         }
