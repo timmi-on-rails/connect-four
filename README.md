@@ -4,3 +4,5 @@
 Implementation of the classic game in C# and transpiled to JavaScript with [Bridge.NET](https://bridge.net/).
 
 Try it online: https://timmi-on-rails.github.io/connect-four/
+
+Or [Download](https://ci.appveyor.com/api/projects/timmi-on-rails/connect-four/artifacts/ConnectFour/bin/Release/ConnectFour.zip)
