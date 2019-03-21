@@ -27,7 +27,6 @@ namespace ConnectFour
 			{
 				var button = new HTMLButtonElement
 				{
-					InnerHTML = (index + 1).ToString(),
 					OnClick = (e) => { Selection?.Invoke(index); }
 				};
 				button.Style.Width = "50px";
