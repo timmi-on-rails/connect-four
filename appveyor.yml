@@ -1,0 +1,29 @@
+image: Visual Studio 2017
+version: 1.0.{build}
+configuration: Release
+platform: Any CPU
+before_build:
+  - nuget restore
+  - echo namespace ConnectFour { static class Version { public const string Info = "%APPVEYOR_BUILD_VERSION%"; } } > ConnectFour/Version.cs
+build:
+  verbosity: minimal
+after_build:
+  - git checkout ConnectFour/Version.cs
+artifacts:
+  - path: ConnectFour/bin/Release/bridge
+    name: ConnectFour
+environment:
+  access_token:
+    secure: Mad20djD7L0vIx2lPd9wh4P3NfbdhuyfAAK/rbxLQERFnhzoHD77XINWT9G4qsFD
+deploy_script:
+  - git config --global credential.helper store
+  - git config --global user.email "dd-tom@web.de"
+  - git config --global user.name "AppVeyor"
+  - ps: Add-Content "$HOME\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - git checkout origin/gh-pages
+  - git rm -rf .
+  - git add ConnectFour/bin/Release/bridge/*
+  - bash -c "git mv -v ConnectFour/bin/Release/bridge/* ."
+  - git commit -m "deploy script"
+  - git push origin HEAD:gh-pages
+  
