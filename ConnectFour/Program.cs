@@ -19,6 +19,8 @@ namespace ConnectFour
 
 		public static void Main()
 		{
+			Console.WriteLine($"Version: {Version.Info}");
+
 			canvas = new HTMLCanvasElement();
 
 			var divElement = new HTMLDivElement();

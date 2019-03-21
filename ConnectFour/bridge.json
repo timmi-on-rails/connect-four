@@ -10,12 +10,6 @@
   // "Formatted" generates non-minified .js files.
   "outputFormatting": "Formatted",
 
-  // Enable the Bridge Console.
-  // Default is false.
-  "console": {
-    "enabled": true
-  },
-
   // Enable browser debugging of C# files.
   // Default is false.
   "sourceMap": {
@@ -25,12 +19,8 @@
   // Set to true to disable Reflection metadata generation.
   // Default is false.
   "reflection": {
-    "disabled": false
+    "disabled": true
   },
-
-  // Generate TypeScript Definition (.d.ts) files.
-  // Default is false.
-  "generateTypeScript": false,
 
   // Delete everything from the output folder.
   // Default is false
@@ -38,7 +28,7 @@
   // If true, all files within the "output"
   // folder location will be deleted on Build.
   //    ** USE WITH CAUTION **
-  "cleanOutputFolderBeforeBuild": false,
+  "cleanOutputFolderBeforeBuild": true,
 
   // Set to true to enable bridge.report.log generation.
   // Default is false.
