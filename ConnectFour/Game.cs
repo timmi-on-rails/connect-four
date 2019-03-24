@@ -16,11 +16,11 @@ namespace ConnectFour
 
 		public enum Chip
 		{
-			Player1,
-			Player2
+			Mouse,
+			Cat
 		}
 
-		public Chip CurrentChip { get; private set; } = Chip.Player1;
+		public Chip CurrentChip { get; private set; } = Chip.Mouse;
 
 		public Chip?[,] Chips { get; } = new Chip?[ROWS, COLUMNS];
 
@@ -43,16 +43,20 @@ namespace ConnectFour
 					}
 				}
 
-				Move selectedMove = (CurrentChip == Chip.Player1 ? await Controller1.Select(this, moves) : await Controller2.Select(this, moves));
+				Move selectedMove = (CurrentChip == Chip.Mouse ? await Controller1.Select(this, moves) : await Controller2.Select(this, moves));
 
 				if (MoveAndCheckForWin(selectedMove))
 				{
-					Window.Alert($"{CurrentChip} wins!");
 					GameUpdated?.Invoke(this);
+					Window.SetTimeout(() =>
+					{
+						Window.Alert($"{CurrentChip} wins!");
+					});
+
 					break;
 				}
 
-				CurrentChip = (CurrentChip == Chip.Player1 ? Chip.Player2 : Chip.Player1);
+				CurrentChip = (CurrentChip == Chip.Mouse ? Chip.Cat : Chip.Mouse);
 			}
 		}
 

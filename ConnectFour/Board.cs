@@ -10,9 +10,10 @@ namespace ConnectFour
 
 	class Board
 	{
-		private const string COLOR_PLAYER_1 = "blue";
-		private const string COLOR_PLAYER_2 = "red";
-		private const string COLOR_RASTER = "#ffe74d";
+		private const string COLOR_PLAYER_1 = "#BAC8D3";
+		private const string COLOR_PLAYER_2 = "#F0A30A";
+		private const string COLOR_RASTER = "#FFE74D";
+		private const string COLOR_CHIP_BACKGROUND = "white";
 
 		private readonly HTMLCanvasElement canvas;
 		private readonly HTMLImageElement imageController1;
@@ -34,9 +35,9 @@ namespace ConnectFour
 
 			divElement.Style.MarginLeft = "10px";
 
-			Func<int, HTMLButtonElement> createButton = (int columnIndex) =>
+			Func<int, HTMLImageElement> createButton = (int columnIndex) =>
 			{
-				var button = new HTMLButtonElement
+				var button = new HTMLImageElement
 				{
 					OnClick = (_) => { ColumnSelected?.Invoke(columnIndex); }
 				};
@@ -75,7 +76,7 @@ namespace ConnectFour
 			await loadedImageController1.Task;
 			await loadedImageController2.Task;
 
-			ColorChanged?.Invoke(game.CurrentChip == Game.Chip.Player1 ? COLOR_PLAYER_1 : COLOR_PLAYER_2);
+			ColorChanged?.Invoke(game.CurrentChip == Game.Chip.Mouse ? COLOR_PLAYER_1 : COLOR_PLAYER_2);
 
 			var ctx = (CanvasRenderingContext2D)canvas.GetContext("2d");
 
@@ -89,18 +90,18 @@ namespace ConnectFour
 			{
 				for (int col = 0; col < game.Chips.GetLength(1); col++)
 				{
-					if (game.Chips[row, col] == Game.Chip.Player1)
+					if (game.Chips[row, col] == Game.Chip.Mouse)
 					{
 						ctx.DrawImage(imageController1, 10 + col * 60, 10 + row * 60, 50d, 50d);
 					}
-					else if (game.Chips[row, col] == Game.Chip.Player2)
+					else if (game.Chips[row, col] == Game.Chip.Cat)
 					{
 						ctx.DrawImage(imageController2, 10 + col * 60, 10 + row * 60, 50d, 50d);
 					}
 					else
 					{
 						ctx.BeginPath();
-						ctx.FillStyle = "#f0f0f0";
+						ctx.FillStyle = COLOR_CHIP_BACKGROUND;
 						ctx.Ellipse(10 + 25 + col * 60, 10 + 25 + row * 60, 25, 25, 0, 0, 2 * Math.PI);
 						ctx.Fill();
 					}
