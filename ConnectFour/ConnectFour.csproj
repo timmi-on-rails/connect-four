@@ -66,10 +66,10 @@
     <Content Include="bridge\background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="bridge\chip1.svg">
+    <Content Include="bridge\chip2.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="bridge\chip2.svg">
+    <Content Include="bridge\mouse.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
