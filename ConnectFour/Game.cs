@@ -70,24 +70,25 @@ namespace ConnectFour
 			int row = i - 1;
 			int col = m.ColumnIndex;
 
-			if (Row(row, col, 0, 1) || Row(row, col, 1, 0) || Row(row, col, 1, 1) || Row(row, col, 1, -1))
-				return true;
-
-			return false;
+			return CheckAxis(row, col, 0, 1)
+				|| CheckAxis(row, col, 1, 0)
+				|| CheckAxis(row, col, 1, 1)
+				|| CheckAxis(row, col, 1, -1);
 		}
 
-		private bool Row(int row, int col, int drow, int dcol)
+		private bool CheckAxis(int row, int col, int drow, int dcol)
 		{
-			return C(drow, dcol) + C(-drow, -dcol) + 1 >= WIN;
+			return CheckOneSide(drow, dcol) + CheckOneSide(-drow, -dcol) + 1 >= WIN;
 
-			int C(int drow2, int dcol2)
+			int CheckOneSide(int drow2, int dcol2)
 			{
 				int c = 0;
 				for (int i = 1; i < WIN; i++)
-					if (col + i * dcol2 >= 0 && col + i * dcol2 < COLUMNS && row + i * drow2 >= 0 && row + i * drow2 < ROWS && Chips[row + i * drow2, col + i * dcol2] == CurrentChip)
-						if (CurrentChip == Chips[row + i * drow2, col + i * dcol2])
-							c++;
-						else break;
+					if (col + i * dcol2 >= 0 && col + i * dcol2 < COLUMNS && row + i * drow2 >= 0 && row + i * drow2 < ROWS
+						&& Chips[row + i * drow2, col + i * dcol2] == CurrentChip)
+						c++;
+					else
+						break;
 				return c;
 			}
 		}
