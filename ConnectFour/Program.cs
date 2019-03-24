@@ -11,6 +11,7 @@ namespace ConnectFour
 
 			Board board = new Board();
 			Document.Body.AppendChild(board.Root);
+			Document.Body.Style.BackgroundImage = "url('background.png')";
 
 			Game game = new Game
 			{
