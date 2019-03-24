@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+using Bridge.Html5;
 using System;
 
 namespace ConnectFour
@@ -18,7 +18,7 @@ namespace ConnectFour
 				Controller2 = new HumanController(board)
 			};
 
-			game.GameUpdated += board.Paint;
+			game.GameUpdated += async (g) => await board.Paint(g);
 
 			_ = game.Run();
 		}
