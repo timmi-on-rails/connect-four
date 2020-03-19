@@ -1,5 +1,6 @@
 using Bridge.Html5;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConnectFour
@@ -10,7 +11,7 @@ namespace ConnectFour
 	{
 		public const int ROWS = 6;
 		public const int COLUMNS = 7;
-		private const int WIN = 4;
+		public const int WIN = 4;
 
 		public event GameUpdatedEventHandler GameUpdated;
 
@@ -34,18 +35,11 @@ namespace ConnectFour
 			{
 				GameUpdated?.Invoke(this);
 
-				List<Move> moves = new List<Move>();
-				for (int i = 0; i < COLUMNS; i++)
-				{
-					if (!Chips[0, i].HasValue)
-					{
-						moves.Add(new Move(i));
-					}
-				}
+				List<Move> moves = GetPossibleMoves(Chips).Select(i => new Move(i)).ToList();
 
 				Move selectedMove = (CurrentChip == Chip.Mouse ? await Controller1.Select(this, moves) : await Controller2.Select(this, moves));
 
-				if (MoveAndCheckForWin(selectedMove))
+				if (MoveAndCheckForWin(Chips, CurrentChip, WIN, selectedMove.ColumnIndex))
 				{
 					GameUpdated?.Invoke(this);
 					Window.SetTimeout(() =>
@@ -60,32 +54,43 @@ namespace ConnectFour
 			}
 		}
 
-		private bool MoveAndCheckForWin(Move m)
+		public static IEnumerable<int> GetPossibleMoves(Chip?[,] chips)
+		{
+			for (int i = 0; i < COLUMNS; i++)
+			{
+				if (!chips[0, i].HasValue)
+				{
+					yield return i;
+				}
+			}
+		}
+
+		public static bool MoveAndCheckForWin(Chip?[,] chips, Chip currentChip, int win, int columnIndex)
 		{
 			int i;
 			for (i = 0; i < ROWS; i++)
-				if (Chips[i, m.ColumnIndex].HasValue)
+				if (chips[i, columnIndex].HasValue)
 					break;
-			Chips[i - 1, m.ColumnIndex] = CurrentChip;
+			chips[i - 1, columnIndex] = currentChip;
 			int row = i - 1;
-			int col = m.ColumnIndex;
+			int col = columnIndex;
 
-			return CheckAxis(row, col, 0, 1)
-				|| CheckAxis(row, col, 1, 0)
-				|| CheckAxis(row, col, 1, 1)
-				|| CheckAxis(row, col, 1, -1);
+			return CheckAxis(chips, currentChip, win, row, col, 0, 1)
+				|| CheckAxis(chips, currentChip, win, row, col, 1, 0)
+				|| CheckAxis(chips, currentChip, win, row, col, 1, 1)
+				|| CheckAxis(chips, currentChip, win, row, col, 1, -1);
 		}
 
-		private bool CheckAxis(int row, int col, int drow, int dcol)
+		private static bool CheckAxis(Chip?[,] chips, Chip currentChip, int win, int row, int col, int drow, int dcol)
 		{
-			return CheckOneSide(drow, dcol) + CheckOneSide(-drow, -dcol) + 1 >= WIN;
+			return CheckOneSide(drow, dcol) + CheckOneSide(-drow, -dcol) + 1 >= win;
 
 			int CheckOneSide(int drow2, int dcol2)
 			{
 				int c = 0;
-				for (int i = 1; i < WIN; i++)
+				for (int i = 1; i < win; i++)
 					if (col + i * dcol2 >= 0 && col + i * dcol2 < COLUMNS && row + i * drow2 >= 0 && row + i * drow2 < ROWS
-						&& Chips[row + i * drow2, col + i * dcol2] == CurrentChip)
+						&& chips[row + i * drow2, col + i * dcol2] == currentChip)
 						c++;
 					else
 						break;
